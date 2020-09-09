@@ -1,0 +1,12 @@
+; DO NOT EDIT (unless you know what you are doing)
+;
+; This subdirectory is a git "subrepo", and this file is maintained by the
+; git-subrepo command. See https://github.com/git-commands/git-subrepo#readme
+;
+[subrepo]
+	remote = https://github.com/arminbiere/cadical
+	branch = master
+	commit = c622a490ec3d9a1a1e998b08120c9b8d0b67a123
+	parent = 7fdf32ac1fcd1a3e2ca89171cfea530e69afd84f
+	method = merge
+	cmdver = 0.4.0
