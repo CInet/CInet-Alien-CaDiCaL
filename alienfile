@@ -1,0 +1,33 @@
+use alienfile;
+use autodie;
+
+use Path::Tiny;
+use IPC::Run3;
+
+configure {
+    requires 'Path::Tiny';
+    requires 'IPC::Run3';
+};
+
+share {
+    start_url 'cadical/';
+    plugin 'Fetch::LocalDir';
+    plugin 'Extract::Directory';
+
+    build [
+        'sh configure -p --competition -O2 -fPIC',
+        'make EXE_FLAGS=-static',
+        'install -t %{.install.prefix} build/cadical build/libcadical.so build/libcadical.a',
+    ];
+};
+
+gather sub {
+    my $build = shift;
+    my $exename = $build->runtime_prop->{exename} =
+        'cadical';
+
+    my $exe = path($build->install_prop->{prefix}, $exename);
+    run3 [$exe, '--version'], \undef, \my $stdout;
+    $stdout =~ /^([0-9.a-z]+)$/;
+    $build->runtime_prop->{version} = $1;
+};
