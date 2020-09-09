@@ -28,7 +28,7 @@ COMPILE=$(CXX) $(CXXFLAGS) -I$(DIR)
 
 #--------------------------------------------------------------------------#
 
-all: libcadical.a cadical mobical
+all: libcadical.a libcadical.so cadical mobical
 
 #--------------------------------------------------------------------------#
 
@@ -43,10 +43,13 @@ all: libcadical.a cadical mobical
 # tester 'mobical') and the library are the main build targets.
 
 cadical: cadical.o libcadical.a makefile
-	$(COMPILE) -o $@ $< -L. -lcadical
+	$(COMPILE) $(EXE_FLAGS) -o $@ $< -L. -lcadical
 
 mobical: mobical.o libcadical.a makefile
-	$(COMPILE) -o $@ $< -L. -lcadical
+	$(COMPILE) $(EXE_FLAGS) -o $@ $< -L. -lcadical
+
+libcadical.so: libcadical.a makefile
+	$(COMPILE) -shared -o $@ -Wl,-whole-archive $< -Wl,-no-whole-archive
 
 libcadical.a: $(OBJ) makefile
 	ar rc $@ $(OBJ)
