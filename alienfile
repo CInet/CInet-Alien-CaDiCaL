@@ -19,6 +19,8 @@ share {
         'make EXE_FLAGS=-static',
         'install -t %{.install.prefix} build/cadical build/libcadical.so build/libcadical.a',
     ];
+
+    plugin 'Gather::IsolateDynamic';
 };
 
 gather sub {
@@ -30,4 +32,8 @@ gather sub {
     run3 [$exe, '--version'], \undef, \my $stdout;
     $stdout =~ /^([0-9.a-z]+)$/;
     $build->runtime_prop->{version} = $1;
+
+    $build->runtime_prop->{libs} =
+        " -L'@{[ $build->install_prop->{prefix} ]}'" .
+	" -lcadical";
 };
